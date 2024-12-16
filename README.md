@@ -8,11 +8,11 @@ Alhamdulillah, by the blessings of Allah, I have completed my first project usin
 Technologies used here are
 ---------------------------
 
-Backend: Php, Laravel, Laravel Rest API
+Backend: C#, ASP.NET Core MVC
 
-Frontend: HTML, CSS, Javascript, BootStrap
+Frontend: HTML, CSS, BootStrap
 
-Database: MySQL
+Database: MSSQL 
 
 
 Explanation
