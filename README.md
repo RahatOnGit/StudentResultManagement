@@ -19,10 +19,10 @@ Database: MSSQL
 Project Sample:
 -------------
 
-Login Page
+* Login Page
 ![1](https://github.com/user-attachments/assets/8eb24a40-8790-466d-b80c-113648c7ee16)
 
-Series 
+* Series 
 ![series](https://github.com/user-attachments/assets/20c82db0-c580-4b45-b15c-10e938733f26)
 
 Add New Course
