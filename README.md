@@ -20,17 +20,20 @@ Project Sample:
 -------------
 
 *      Login Page
+*  
 ![1](https://github.com/user-attachments/assets/8eb24a40-8790-466d-b80c-113648c7ee16)
 
 
-*      Series 
+*      Series
+*  
 ![series](https://github.com/user-attachments/assets/20c82db0-c580-4b45-b15c-10e938733f26)
 
 
 *      Add New Course
+*  
 ![course](https://github.com/user-attachments/assets/8429b5aa-52d8-447e-a2dd-f7d6edd39371)
 
-All Students 
+*      All Students 
 ![all-students](https://github.com/user-attachments/assets/e6d814e3-ba7d-43d3-88f4-029c1f2950ea)
 
 Student details
