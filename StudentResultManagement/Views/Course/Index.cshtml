@@ -1,0 +1,54 @@
+﻿
+@model IEnumerable<Course>
+
+
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">All Courses</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>&nbsp; New Course</a>
+    </div>
+</div>
+
+<div>
+    <table class="table table-striped border" id="myTable">
+        <thead>
+            <tr class="table-info">
+                <th>
+                    @Html.DisplayNameFor(c => c.CourseNo)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(c => c.CourseTitle)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(c => c.SemesterId)
+                </th>
+                <th></th>
+                <th></th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CourseNo</td>
+                    <td>@item.CourseTitle</td>
+
+                    <td>@item.Semester.Name</td>
+
+                    <td><partial name="newButton3" model="@item.Id" /></td>
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>
+
+
+

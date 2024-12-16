@@ -1,0 +1,23 @@
+﻿@model Series
+
+@{
+    ViewData["Title"] = "Create Series";
+}
+
+<h2>Create Tag</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="SeriesName" class="control-label"></label>
+        <input asp-for="SeriesName" class="form-control" />
+        <span asp-validation-for="SeriesName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

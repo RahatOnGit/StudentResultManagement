@@ -1,0 +1,85 @@
+﻿@model IEnumerable<StudentResultManagement.Models.Students>
+
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+
+<div class="card">
+    <div class="card-header bg-success">
+
+    </div>
+
+    <div class="card-body ">
+       
+            <h4>Semester: @ViewBag.SemesterName </h4>
+
+            <h4>Series: @ViewBag.SeriesName</h4>
+
+            <a asp-action="GeneratePdf" class="btn btn-outline-success" asp-route-series="@ViewBag.Series_Id" asp-route-semester="@ViewBag.Semester_Id">Generate PDF</a>
+
+        
+
+    </div>
+
+    <div class="card-footer bg-alert">
+
+    </div>
+
+
+</div>
+    </div>
+</div>
+
+<div class="Student-Data mt-4">
+
+
+    
+
+        @foreach (var item in Model)
+        {
+        <div class="row mt-2">
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-info">
+
+                    </div>
+
+                    <div class="card-body">
+                        <h6 class="card-title">@item.Roll</h6>
+
+                        <p class="card-title"><b>Name:</b> @item.Name</p>
+                        <p class="card-title"><b>Phone:</b> @item.PhoneNo</p>
+                        @if (item.Email != null)
+                        {
+                            <p class="card-title"><b>Email:</b> @item.Email</p>
+
+                        }
+
+                        else
+                        {
+                            <p class="card-title"><b>Email:</b>Unknown</p>
+                        }
+
+
+                        <a asp-action="Semester" asp-controller="Student" class="btn btn-primary" asp-route-student_id="@item.Id" asp-route-semester_id="@ViewBag.Semester_Id"><i class="fa-regular fa-pen-to-square"></i></a>
+
+
+                    </div>
+
+                   
+
+
+
+                   
+
+                </div>
+            </div>
+
+        </div>
+        }
+
+
+
+    
+</div>
+

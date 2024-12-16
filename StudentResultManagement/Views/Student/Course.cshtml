@@ -1,0 +1,29 @@
+﻿@model Result
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+
+            <div class="card-header text-light bg-success">
+                <h6>Student Id: @ViewBag.StudentRoll.Roll</h6>
+                <h6>Course No: @ViewBag.CourseNo.CourseNo</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Course" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
+                    <input type="hidden" asp-for="CourseId" value="@ViewBag.CourseId" />
+                    <input type="hidden" asp-for="StudentId" value="@ViewBag.StudentId" />
+
+                    <input asp-for="Mark" class="form-control" required />
+                    <span class="alert-danger" asp-validation-for="Mark" />
+
+
+                    <input class="mt-3 btn btn-success" type="submit" value="Add Mark" />
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,51 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "DownloadPDF";
+}
+
+
+<a asp-action="GenerateResultSheetPDF" class="btn btn-primary mb-3" asp-controller="GenerateResult"
+   asp-route-series="@ViewBag.Series" asp-route-semester="@ViewBag.Semester">Download Result Sheet</a>
+
+<div>
+    <table class="table table-striped border" id="myTable">
+        <thead>
+            <tr class="table-success">
+                <th>Student Id</th>
+                <th>Name</th>
+
+                @foreach (var courseName in Model[0].courses)
+                {
+                    <th>@courseName</th>
+                }
+
+
+            </tr>
+        </thead>
+
+        <tbody>
+            
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td>@data.Id</td>
+                    <td>@data.Name</td>
+
+                    @foreach (var some in data.Marks)
+                    {
+                        <td>@some</td>
+                    }
+
+
+
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>
+
+
+

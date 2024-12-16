@@ -1,0 +1,49 @@
+﻿@model StudentResultManagement.Models.GenerateResultViewModel
+
+
+<div class="row justify-content-center">
+
+
+    <div class="col-lg-6">
+        <div class="card text-light">
+            <div class="card-header bg-success">
+                <h6 class="card-text text-center">Generate Result</h6>
+            </div>
+            
+            <div class="card-body">
+                <form asp-action="AllStudents" asp-controller="GenerateResult" method="get">
+                    <div class="row">
+
+                    
+                    <div class="form-group">
+                        <select asp-for="Series" class="form-control" asp-items="@ViewBag.Series" required>
+                            <option value="">Select Series</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group mt-2">
+                        <select asp-for="Semester" class="form-control" asp-items="@ViewBag.Semester" required>
+                            <option value="">Select Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                            <input class="mt-2 btn btn-outline-success" type="submit" value="Generate" />
+
+                    </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
