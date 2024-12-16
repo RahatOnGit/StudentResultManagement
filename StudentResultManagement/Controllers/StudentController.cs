@@ -55,7 +55,10 @@ namespace StudentResultManagement.Controllers
                 await _db.Students.AddAsync(student);
                 await _db.SaveChangesAsync();
                 ViewBag.Success = true;
-                return View();
+                ModelState.Clear();
+                ViewBag.Series = new SelectList(_db.Series, "Id", "SeriesName");
+
+                return View() ;
             }
 
            
