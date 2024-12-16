@@ -2,10 +2,6 @@ Alhamdulillah, by the blessings of Allah, I have completed my first project usin
 
 
 # Student Result Mangement System
-
-About
------
-
 - The application can be used for generating students result easily.
 
 
