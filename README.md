@@ -22,36 +22,36 @@ Database: MSSQL
 Project Sample:
 -------------
 
-*      Login Page  
-![1](https://github.com/user-attachments/assets/8eb24a40-8790-466d-b80c-113648c7ee16)
+![proj-1](https://github.com/user-attachments/assets/248f459d-dca8-4832-8e87-a1a0c2556255)
 
 
-*      Series 
-![series](https://github.com/user-attachments/assets/20c82db0-c580-4b45-b15c-10e938733f26)
+![series-proj2](https://github.com/user-attachments/assets/24b9cfd5-c329-4a9c-995d-fc6ebd7cee70)
 
+![courses-proj3](https://github.com/user-attachments/assets/6656e231-37db-48f4-af55-1c3d67167683)
 
-*      Add New Course
-![course](https://github.com/user-attachments/assets/8429b5aa-52d8-447e-a2dd-f7d6edd39371)
+![students-proj4](https://github.com/user-attachments/assets/b7588266-6ff0-4529-b7b7-4f6a0867c716)
 
+![student-semester-proj5](https://github.com/user-attachments/assets/886a00f2-a2ad-4ef8-b6e8-ca03886c3b71)
 
-*      All Students 
-![all-students](https://github.com/user-attachments/assets/e6d814e3-ba7d-43d3-88f4-029c1f2950ea)
+![student-add-mark-6](https://github.com/user-attachments/assets/d56a0678-4069-4323-905f-db28b07b7778)
 
-*      Student details
-![student-details](https://github.com/user-attachments/assets/0af36f6c-c705-420a-8405-8dc7f3f33bee)
-
-*      Student details for a semester
-![student-details-for-a-semester](https://github.com/user-attachments/assets/65b4aefd-3445-46bb-a6ac-273a8481e893)
-
-*      Selection for generating result
-![selection-for-generating-result](https://github.com/user-attachments/assets/90a1de41-aa26-41e7-95e4-11999a2567df)
-
-*      All Marks for a semester and a series
-![all-marks](https://github.com/user-attachments/assets/d114ffca-ff1e-483e-b8f9-01bfc70ef459)
-
-*      Downloaded Marksheet 
-![downloaded-result-sheet](https://github.com/user-attachments/assets/eb4126bc-33d4-448c-b42e-a63eb8027ada)
+![student-cgpa-page](https://github.com/user-attachments/assets/a520be0d-72ab-4a36-a380-eaafcf65244e)
 
 
 
+![student-data-add-from-excel-7](https://github.com/user-attachments/assets/4e46e186-bdd6-4cc5-9755-5bda81a9035e)
+
+![after-adding-data-from-excel-sheet](https://github.com/user-attachments/assets/7ff5bae9-dd5e-4b00-934c-bf10a542ac60)
+
+
+![generate-result-selection](https://github.com/user-attachments/assets/397f8ac8-8819-49b0-af6e-1ed556138b70)
+
+![adding-mark-from-excel-sheet](https://github.com/user-attachments/assets/f44e5849-6836-434d-87ef-506caf7c7301)
+
+
+![mark-adding-confarmation](https://github.com/user-attachments/assets/19fdcaad-2bed-4f6d-9eee-09b7f7cd9c92)
+
+![after-adding-marks](https://github.com/user-attachments/assets/220abbcb-7d99-40df-a0da-1d5729ba7825)
+
+![after-pdf-download](https://github.com/user-attachments/assets/72383e5b-0980-4444-85fd-953794721fd9)
 
