@@ -127,7 +127,7 @@ namespace StudentResultManagement.Controllers
                 {
                     _db.Courses.Remove(data);
                     await _db.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return LocalRedirect(returnURl);
                 }
 
 
