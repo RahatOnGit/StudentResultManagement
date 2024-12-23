@@ -10,7 +10,7 @@ Technologies used here are
 
 Backend: C#, ASP.NET Core MVC
 
-Frontend: HTML, CSS, BootStrap
+Frontend: HTML, CSS, BootStrap, jQuery
 
 Database: MSSQL 
 
