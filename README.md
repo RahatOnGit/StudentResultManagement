@@ -2,7 +2,10 @@ Alhamdulillah, by the blessings of Allah, I have completed my first project usin
 
 
 # Student Result Mangement System
-- The application can be used for generating students result easily.
+- This application can be used for generating students result simply.
+- Students data and marks can be inserted from excel sheet.
+- Students mark for a semester can be generated into PDF format.
+- It simplies the calculations of GPA for a semester.
 
 
 Technologies used here are
