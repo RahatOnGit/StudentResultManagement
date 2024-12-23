@@ -1,76 +1,109 @@
 ﻿@model Students
 
+@{
+    var SeriesName = ViewBag.SeriesName;
+
+    var SeriesId = ViewBag.SeriesId;
+
+}
 
 
-<h2>Add New Student</h2>
+<h4 class="text-center">Add New Student [@SeriesName series]</h4>
+<hr/>
 
-<form asp-action="Create" method="post">
+<div class="d-lg-flex flex-lg-row">
+    <div class="col-lg-5 bg-light">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
 
-    @if (ViewBag.IdMessage!=null)
-    {
-         <span class="text-danger">@ViewBag.IdMessage</span>
-    }
+                    @if (ViewBag.IdMessage != null)
+                    {
+                        <span class="text-danger">@ViewBag.IdMessage</span>
+                    }
 
-    @if (ViewBag.Success == true)
-    {
-        <div class="col-4 alert alert-success alert-dismissible container text-center" role="alert">
-            <button class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="close">
-        </button><h6>Student data has been added successfully!</h6>
-        <hr />
-        <p>Click <a asp-action="Index">here</a> to see all students data</p>
-       </div>
+                    @if (ViewBag.Success == true)
+                    {
+                        <div class="alert alert-success alert-dismissible container text-center" role="alert">
+                            <button class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="close">
+                            </button><h6>Successfull!</h6>
+                            <hr />
+                            <p>Click <a asp-action="AllStudents" asp-route-seriesName="@SeriesName" asp-route-seriesId="@SeriesId">here</a> to see all students data</p>
+                        </div>
 
-    }
+                    }
+                    <input type="hidden" asp-for="SeriesId" value="@SeriesId" />
 
 
-    <div class="form-group">
-        <label asp-for="Roll" class="control-label"></label>
-        <input asp-for="Roll" class="form-control" />
-        <span asp-validation-for="Roll" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Roll" class="control-label"></label>
+                        <input asp-for="Roll" class="form-control" />
+                        <span asp-validation-for="Roll" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="PhoneNo" class="control-label"></label>
+                        <input asp-for="PhoneNo" class="form-control" />
+                        <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">Series</label>
+                        <input type="text" class="form-control" value="@SeriesName" disabled />
+
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <a asp-action="AllStudents" asp-route-seriesName="@SeriesName" asp-route-seriesId="@SeriesId" class="btn btn-primary">Back to list</a>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+     
     </div>
-
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="col-lg-2 p-5">
+        <div class="text-success p-4"> <h4>Or,</h4></div>
+     </div>
+        
+        
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-success text-center">@ViewBag.Message</h5>
+                <h3 class="text-center">Use excel sheet</h3>
+                <hr/>
+                <form asp-route-returnUrl="@ViewBag.ReturnUrl" method="post" asp-controller="Student" asp-action="ImportFromExcelStudentData"
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="SeriesId" value="@SeriesId" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="file" name="file" accept=".xls,.xlsx" class="form-control" />
+                    <button type="submit" name="Upload" class="mt-3 btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 
 
-    <div class="form-group">
-        <label asp-for="PhoneNo" class="control-label"></label>
-        <input asp-for="PhoneNo" class="form-control" />
-        <span asp-validation-for="PhoneNo" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-group">
-        <label asp-for="SeriesId" class="control-label"></label>
-        <select asp-for="SeriesId" asp-items="ViewBag.Series"
-                class="form-select" required>
-        <option value="">Select a Series</option>
-            </select>
-        @if (ViewBag.Message!=null)
-        {
-            <span class="text-danger">@ViewBag.Message</span>
-
-        }
-
-    </div>
-
-    <div class="form-group mt-2">
-        <button type="submit" class="btn btn-success">Submit</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to list</a>
-
-    </div>
-</form>
 
 @section Scripts {
     @{

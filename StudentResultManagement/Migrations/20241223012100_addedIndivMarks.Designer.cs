@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentResultManagement.Data;
 
@@ -11,9 +12,11 @@ using StudentResultManagement.Data;
 namespace StudentResultManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241223012100_addedIndivMarks")]
+    partial class addedIndivMarks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,9 +279,6 @@ namespace StudentResultManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("Final")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Grade")
                         .HasColumnType("float");
 
                     b.Property<int?>("StudentId")

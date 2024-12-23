@@ -28,8 +28,7 @@
                         </li>
                         
 
-                        @if(_signInManager.IsSignedIn(User))
-                        {
+                        
                             
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Series" asp-action="Index">Series</a>
@@ -39,41 +38,55 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Semester" asp-action="Index">Semesters</a>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
-                            </li>
+                           
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">All Students</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="GenerateResult" asp-action="ImportMarksFromExcel">Add Marks from Excel</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Create">Add New Student</a>
-                            </li>
+
+                        
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="GenerateResult" asp-action="Index">Generate Result</a>
                             </li>
-
                             
-                                   <form method="post" asp-action="Logout" asp-controller="Account">
-                                        <button type="submit" style="width:auto"
-                                                class="btn btn-danger">
-                                            Logout 
-                                        </button>
-                                   </form>
+                        </ul>
+                         <ul class="navbar-nav">
+                            @if(_signInManager.IsSignedIn(User))
+                            {
+                             <li class="nav-item">
+                                <h6 class="mt-2 mb-2">@User.Identity.Name &nbsp;</h6>
+                             </li>
 
-
+                              <li class="nav-item">
+                                <form class="form-inline" method="post" asp-action="Logout" asp-controller="Account">
+                                    <button type="submit" style="width:auto"
+                                            class="btn btn-danger">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
                         }
 
                         else
                         {
-                            <li class="nav-item ml-auto">
+                            <li class="nav-item">
                                 <a class="btn btn-success" asp-controller="account" asp-action="login">
                                     Login
                                 </a>
                             </li>
                         }
-
                     </ul>
+
+                          
+                                  
+
+
+                        
+
+                          
+                       
+
+                   
                 </div>
             </div>
         </nav>

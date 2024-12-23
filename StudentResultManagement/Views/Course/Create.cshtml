@@ -1,10 +1,18 @@
 ﻿@model Course
 
+@{
+    var SemesterName = ViewBag.SemesterName;
 
+    var SemesterId = ViewBag.SemesterId;
+
+}
 
 <h2>Add New Course</h2>
 
-<form asp-action="Create" method="post">
+<h4 class="text-center text-danger">@ViewBag.Message</h4>
+
+<form asp-action="Create" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
+    <input type="hidden" asp-for="SemesterId" value="@SemesterId" />
 
     <div class="form-group">
         <label asp-for="CourseNo" class="control-label"></label>
@@ -20,13 +28,20 @@
 
 
     <div class="form-group">
-        <label asp-for="SemesterId" class="control-label"></label>
-        <select asp-for="SemesterId" class="form-control" asp-items="ViewBag.Semesters"></select>
+        <label asp-for="Credit" class="control-label"></label>
+        <input asp-for="Credit" class="form-control" />
+        <span asp-validation-for="Credit" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Semester Name</label>
+        <input type="text" class="form-control" value="@SemesterName" disabled/>
     </div>
 
     <div class="form-group mt-2">
         <button type="submit" class="btn btn-success">Submit</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+        <a asp-action="AllCourses" asp-route-semesterId="@SemesterId"
+           asp-route-semesterName="@SemesterName" class="btn btn-secondary">Back to list</a>
 
     </div>
 </form>

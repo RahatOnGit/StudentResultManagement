@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Org.BouncyCastle.Tls;
 using StudentResultManagement.Data;
 using StudentResultManagement.Models;
 using System.Dynamic;
+using System.Linq;
 using System.Net.Sockets;
 
 namespace StudentResultManagement.Controllers
@@ -21,58 +23,94 @@ namespace StudentResultManagement.Controllers
             _db = db;
         }
 
-        public IActionResult Index(string searchString)
+      
+
+        public async Task<IActionResult> AllStudents(int seriesId, string seriesName, string? searchString, int pg = 1)
         {
-           
-            var data = _db.Students.Include(c => c.Series).ToList();
-            
+
+            int PageSize = 10;
+
+            if (pg < 1)
+                pg = 1;
+
+            var all_students = new List<Students>();
+
+
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                data = _db.Students.Include(c => c.Series).Where(s => s.Roll.Contains(searchString)).ToList();
+                all_students = await _db.Students.Include(c => c.Series).
+                    Where(s => s.Roll.Contains(searchString) && s.SeriesId == seriesId).
+                    ToListAsync();
                 ViewBag.SearchString = searchString;
+                PageSize = 5;
+            }
+
+            else
+            {
+                all_students = await _db.Students.Include(c => c.Series).
+                Where(c => c.SeriesId == seriesId).OrderBy(c => c.Roll).ToListAsync();
             }
 
 
+            int totalItems = all_students.Count();
+
+            var pager = new Pager(totalItems, pg, PageSize);
+
+            int recSkip = (pg - 1) * PageSize;
+
+            var data = all_students.Skip(recSkip).Take(PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            ViewBag.SeriesId = seriesId;
+            ViewBag.SeriesName = seriesName;
 
             return View(data);
         }
 
-        public IActionResult Create()
+        public IActionResult Create(string SeriesName, int SeriesId, string returnUrl)
         {
-            ViewBag.Series = new SelectList(_db.Series, "Id", "SeriesName");
+            ViewBag.SeriesName = SeriesName;
+            ViewBag.SeriesId = SeriesId;
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Students student)
+        public async Task<IActionResult> Create(Students student, string returnUrl)
         {
 
-            var has_Id = await _db.Students.Where(c=>c.Roll==student.Roll).FirstOrDefaultAsync();
+            var has_Id = await _db.Students.Where(c => c.Roll == student.Roll).FirstOrDefaultAsync();
 
+            var series = await _db.Series.Where(c => c.Id == student.SeriesId).FirstOrDefaultAsync();
+            ViewBag.SeriesName = series.SeriesName;
+            ViewBag.SeriesId = student.SeriesId;
+            ViewBag.ReturnUrl = returnUrl;
 
-            if (ModelState.IsValid && has_Id==null)
+            if (ModelState.IsValid && has_Id == null)
             {
                 await _db.Students.AddAsync(student);
                 await _db.SaveChangesAsync();
                 ViewBag.Success = true;
-                ModelState.Clear();
-                ViewBag.Series = new SelectList(_db.Series, "Id", "SeriesName");
 
-                return View() ;
+                ModelState.Clear();
+
+
+                return View();
             }
 
-           
 
-            if (has_Id!=null)
+
+            if (has_Id != null)
             {
-                ViewBag.Series = new SelectList(_db.Series, "Id", "SeriesName");
                 ViewBag.IdMessage = "This roll no. has been added for a student!";
             }
 
-           
-                
-     
-           
+
+
+
+
 
 
 
@@ -81,56 +119,159 @@ namespace StudentResultManagement.Controllers
 
         }
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            ViewBag.Series = new SelectList(_db.Series, "Id", "SeriesName");
 
-            var data = await _db.Students.Include(c => c.Series).FirstOrDefaultAsync(c=>c.Id==id);
+        [HttpPost]
+        public async Task<IActionResult> ImportFromExcelStudentData(string returnUrl, IFormFile file, int SeriesId)
+        {
+            if (file != null && file.Length > 0)
+            {
+                //Create an Instance of ExcelFileHandling
+                ExcelFileHandling excelFileHandling = new ExcelFileHandling();
+
+                //Call the CreateExcelFile method by passing the stream object which contains the Excel file
+                var students = excelFileHandling.ParseExcelFile(file.OpenReadStream());
+
+                // Now save these students to the database
+
+                var existing_Students = new List<Students>();
+
+                foreach (var student in students)
+                {
+                    var has_Id = await _db.Students.Where(c => c.Roll == student.Roll).FirstOrDefaultAsync();
+
+                    if (has_Id != null)
+                    {
+                        existing_Students.Add(student);
+                    }
+
+                    else
+                    {
+                        student.SeriesId = SeriesId;
+                        await _db.Students.AddAsync(student);
+                        await _db.SaveChangesAsync();
+                    }
+
+                }
+
+
+
+                ViewBag.Message = "Successful";
+                return LocalRedirect(returnUrl);
+            }
+
+
+
+            return LocalRedirect(returnUrl);
+        }
+        public async Task<IActionResult> Edit(string SeriesName, int SeriesId, int id, string returnUrl)
+        {
+            ViewBag.SeriesName = SeriesName;
+            ViewBag.SeriesId = SeriesId;
+
+            var data = await _db.Students.Include(c => c.Series).FirstOrDefaultAsync(c => c.Id == id);
+
+            ViewBag.ReturnURl = returnUrl;
+
 
             return View(data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Students student)
+        public async Task<IActionResult> Edit(int id,Students student, string returnURl)
         {
             if (ModelState.IsValid)
             {
-                _db.Students.Update(student);
+                var data = await _db.Students.FindAsync(id);
+
+                data.Roll = student.Roll;
+                data.Name = student.Name;
+                data.PhoneNo = student.PhoneNo;
+                data.Email = student.Email;
+                data.SeriesId = student.SeriesId;
+
+                _db.Students.Update(data);
                 await _db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return LocalRedirect(returnURl);
             }
 
             return View(student);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string SeriesName, int SeriesId, int id, string returnUrl)
+        {
+            ViewBag.SeriesName = SeriesName;
+            ViewBag.SeriesId = SeriesId;
+            ViewBag.ReturnURl = returnUrl;
+
+            var data = await _db.Students.Include(c => c.Series).FirstOrDefaultAsync(c => c.Id == id);
+
+            return View(data);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, Students student, string returnURl)
+        {
+            if (id == student.Id)
+            {
+                var data = await _db.Students.FindAsync(id);
+                if (data != null)
+                {
+                    _db.Students.Remove(data);
+                    await _db.SaveChangesAsync();
+                    return LocalRedirect(returnURl);
+                }
+
+
+            }
+
+            return View(student);
+        }
+
 
         public IActionResult Details(int id)
         {
             dynamic mymodel = new ExpandoObject();
             mymodel.Semesters = _db.Semesters.ToList();
-            mymodel.Student = _db.Students.Include(c=>c.Series).Where(c=>c.Id==id).FirstOrDefault();
+            var student_data = _db.Students.Include(c => c.Series).Where(c => c.Id == id).FirstOrDefault();
+            mymodel.Student = student_data;
+
+
+            mymodel.SeriesId = student_data.SeriesId;
+            mymodel.SeriesName = student_data.Series.SeriesName;
 
             var total_courses = _db.Courses.ToList();
-            double Total = 0.0;
-            int count = 0;
+            
+            double sum = 0.0;
+            double credits = 0.0;
+            
             foreach (var course in total_courses)
             {
                 var data = _db.Results
-                                    .Where(c => c.CourseId==course.Id && c.StudentId == id)
+                                    .Where(c => c.CourseId == course.Id && c.StudentId == id)
                                     .FirstOrDefault();
                 if (data != null)
-                { 
-                    Total += (Convert.ToDouble(data.Mark));
-                    count += 1;
-                   
+                {
+                    double grade = (double) data.Grade;
+
+
+                    if (grade > 0.0)
+                    {
+                        sum += (grade * course.Credit);
+                        credits += course.Credit;
+
+                    }
 
                 }
 
             }
 
-            mymodel.AverageResult = "";
-            if (count > 0)
+            mymodel.CGPA = "";
+
+            if (credits > 0.0)
             {
-                mymodel.AverageResult = Math.Round(Total / (count * 1.0), 2);
+                mymodel.CGPA = Math.Round(sum / credits, 2);
 
             }
 
@@ -139,46 +280,61 @@ namespace StudentResultManagement.Controllers
         }
 
 
-        public  IActionResult Semester(int semester_id, int student_id)
+        public IActionResult DetailsOFaSemester(int semester_id, int student_id)
         {
             ViewBag.StudentId = student_id;
             ViewBag.SemesterId = semester_id;
 
             dynamic mymodel = new ExpandoObject();
-            var total_courses = _db.Courses.Where(c=>c.SemesterId== semester_id).ToList();
+            var total_courses = _db.Courses.Where(c => c.SemesterId == semester_id).ToList();
             mymodel.Courses = total_courses;
             mymodel.Student = _db.Students.Include(c => c.Series).Where(c => c.Id == student_id).FirstOrDefault();
             mymodel.Semester = _db.Semesters.Where(c => c.Id == semester_id).FirstOrDefault();
-          
+
             mymodel.Results = new List<dynamic>();
 
-            
-            double Total = 0.0;
-            int count = 0;
+
+            double sum = 0.0;
+            double credits = 0.0;
             foreach (var course in total_courses)
             {
-                var data =  _db.Results
+                var data = _db.Results
                                     .Where(c => c.CourseId == course.Id && c.StudentId == student_id)
                                     .FirstOrDefault();
+
+
                 if (data == null)
                 {
-                    mymodel.Results.Add("Grade isn't added yet!");
+                    mymodel.Results.Add("Mark isn't added yet!");
                 }
 
                 else
                 {
-                    Total += (Convert.ToDouble(data.Mark));
-                    count += 1;
-                    mymodel.Results.Add(data);
+                   
+                    
+
+                    double grade = (double) data.Grade;
+
+                    
+                    if(grade > 0.0)
+                    {
+                        sum += (grade * course.Credit);
+                        credits += course.Credit;
+
+                    }
+
+
+
+                    mymodel.Results.Add(data.Grade);
 
                 }
 
             }
 
-            mymodel.AverageResult = "";
-            if (count > 0)
+            mymodel.GPA = "";
+            if (credits > 0.0)
             {
-                mymodel.AverageResult = Math.Round( Total / (count * 1.0) , 2 );
+                mymodel.GPA = Math.Round(sum /credits, 2);
 
             }
 
@@ -186,27 +342,55 @@ namespace StudentResultManagement.Controllers
 
 
 
-            
+
         }
 
-        public IActionResult Course(int course_id, int student_id, string returnUrl)
+        public IActionResult AddMarkofACourse(int course_id, int student_id, string returnUrl)
         {
-            
+
             ViewBag.CourseId = course_id;
             ViewBag.StudentId = student_id;
             ViewBag.ReturnUrl = returnUrl;
 
-            ViewBag.StudentRoll = _db.Students.Where(c=>c.Id== student_id).FirstOrDefault(); 
-            ViewBag.CourseNo = _db.Courses.Where(c=>c.Id == course_id).FirstOrDefault();
-           
+            ViewBag.StudentRoll = _db.Students.Where(c => c.Id == student_id).FirstOrDefault();
+            ViewBag.CourseNo = _db.Courses.Where(c => c.Id == course_id).FirstOrDefault();
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult Course(Result result, string returnUrl)
+        public IActionResult AddMarkofACourse(Result result, string returnUrl)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                List<double> ct_marks = new List<double>();
+
+                ct_marks.Add(result.CT1);
+                ct_marks.Add(result.CT2);
+                ct_marks.Add(result.CT3);
+                ct_marks.Add(result.CT4);
+
+                ct_marks = ct_marks.OrderByDescending(c => c).ToList();
+
+                double total_marks = Math.Round(((ct_marks[0] + ct_marks[1] + ct_marks[2]) / 3.0) +
+                    result.Attendence + result.Final, 2);
+
+                double diff = Math.Round(total_marks - 40.0, 2);
+
+                double grade = 0.0;
+
+                if (diff >= 0.0)
+                {
+                    grade = Math.Round(2.0 + (diff * 0.05), 2);
+                    if (grade > 4.0)
+                    {
+                        grade = 4.0;
+                    }
+                }
+
+                result.Grade = grade;
+
+
                 _db.Results.Add(result);
                 _db.SaveChanges();
                 return LocalRedirect(returnUrl);
@@ -215,9 +399,10 @@ namespace StudentResultManagement.Controllers
             return View(result);
         }
 
-        public IActionResult UpdateCourse(int course_id, int student_id, string returnUrl)
+        public IActionResult UpdateMarkOfACourse(int course_id, int student_id, string returnUrl)
         {
-            var data = _db.Results.Where(c=>c.CourseId==course_id && c.StudentId==student_id).FirstOrDefault();
+            var data = _db.Results.Where(c => c.CourseId == course_id && c.StudentId == student_id).FirstOrDefault();
+            
             ViewBag.CourseId = course_id;
             ViewBag.StudentId = student_id;
             ViewBag.ReturnUrl = returnUrl;
@@ -230,18 +415,54 @@ namespace StudentResultManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCourse(int id,Result result, string ReturnUrl)
+        public IActionResult UpdateMarkOfACourse(Result result, string ReturnUrl)
         {
             if (ModelState.IsValid)
             {
-                var data = _db.Results.FirstOrDefault(result=>result.Id==id);
-                data.Mark = result.Mark;
+                var data = _db.Results.Where(c=>c.CourseId==result.CourseId && 
+                c.StudentId==result.StudentId).FirstOrDefault();
+
+                
+                List<double> ct_marks = new List<double>();
+
+                ct_marks.Add(result.CT1);
+                ct_marks.Add(result.CT2);
+                ct_marks.Add(result.CT3);
+                ct_marks.Add(result.CT4);
+
+                ct_marks = ct_marks.OrderByDescending(c => c).ToList();
+
+                double total_marks = Math.Round(((ct_marks[0] + ct_marks[1] + ct_marks[2]) / 3.0) +
+                    result.Attendence + result.Final, 2);
+
+                double diff = Math.Round(total_marks - 40.0, 2);
+
+                double grade = 0.0;
+
+                if (diff >= 0.0)
+                {
+                    grade = Math.Round(2.0 + (diff * 0.05), 2);
+                    if (grade > 4.0)
+                    {
+                        grade = 4.0;
+                    }
+                }
+
+                result.Grade = grade;
+
+                data.CT1 = result.CT1;
+                data.CT2 = result.CT2;
+                data.CT3 = result.CT3;
+                data.CT4 = result.CT4;
+                data.Attendence = result.Attendence;
+                data.Final = result.Final;
+                data.Grade = result.Grade;
+
                 _db.Results.Update(data);
                 _db.SaveChanges();
-
-
-
                 return LocalRedirect(ReturnUrl);
+               
+                
             }
 
             return View(result);

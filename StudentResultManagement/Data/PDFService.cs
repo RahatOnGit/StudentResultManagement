@@ -10,7 +10,7 @@ namespace StudentResultManagement.Data
     
         public class PDFService
         {
-            public byte[] GeneratePDF(IEnumerable<Students> all_students, Dictionary<int, List<string>> result_data,
+            public byte[] GeneratePDF(IEnumerable<Students> all_students, Dictionary<int, List<double>> result_data,
                List<string> coursesName, string seriesName, string semesterName)
             {
                 //Define your memory stream which will temporarily hold the PDF
@@ -32,12 +32,7 @@ namespace StudentResultManagement.Data
                   
                 
 
-                // Invoice data
-                //document.Add(new Paragraph($"Invoice Number: {invoice.InvoiceNumber}"));
-                //document.Add(new Paragraph($"Date: {invoice.Date.ToShortDateString()}"));
-                //document.Add(new Paragraph($"Customer Name: {invoice.CustomerName}"));
-                //document.Add(new Paragraph($"Payment Mode: {invoice.PaymentMode}"));
-                // Table for invoice items
+                
                 int cnt = coursesName.Count;
                 cnt += 2;
                 float[] fl = new float[cnt];
@@ -70,15 +65,15 @@ namespace StudentResultManagement.Data
 
 
 
-                    foreach (KeyValuePair<int, List<string>> kvp in result_data)
+                    foreach (KeyValuePair<int, List<double>> kvp in result_data)
                     {
                         if (kvp.Key == data.Id)
                         {
-                            List<string> list = kvp.Value;
+                            List<double> list = kvp.Value;
 
-                            foreach (string rec in list)
+                            foreach (double rec in list)
                             {
-                                table.AddCell(new Cell().Add(new Paragraph(rec)));
+                                table.AddCell(new Cell().Add(new Paragraph(rec.ToString("0.######"))));
 
                             }
                         }

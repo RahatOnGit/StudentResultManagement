@@ -87,6 +87,8 @@ namespace StudentResultManagement.Controllers
 
         }
 
+        
+
 
 
         public async Task<IActionResult> Delete(int id)

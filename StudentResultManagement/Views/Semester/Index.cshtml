@@ -1,37 +1,55 @@
 ﻿@model IEnumerable<Semesters>
 
+<style>
+    .back-color {
+        background-color: #A0DAA9;
+    }
+
+
+
+        .back-color:hover {
+            background-color: #D9CE52;
+        }
+</style>
+
 <br />
-<br />
+
+
 
 <div class="row">
-    <div class="col-6">
-        <h2 class="text-info">Semester Name</h2>
+    <div class="col-12">
+        <h2 class="text-center text-dark"> All Semesters </h2>
     </div>
-    <div class="col-6 text-right">
-        <a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>&nbsp; New Semester</a>
-    </div>
+    <hr />
 </div>
 
-<br />
 
-<div>
-    <table class="table table-striped border">
-        <tr class="table-info">
-            <th>
-                @Html.DisplayNameFor(c => c.Name)
-            </th>
 
-            <th></th>
-            <th></th>
-        </tr>
 
+
+<div class="mt-5">
+    
+    <div class="row">
+
+   
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.Name</td>
-                <td><partial name="newButton2" model="@item.Id" /></td>
-            </tr>
+            <div class="col-lg-3">
+                <div class="card back-color text-dark text-center mt-5">
+                    <div class="card-body">
+                        <h3>@item.Name</h3>
+
+                        <a asp-controller="Course" asp-action="AllCourses"
+                           asp-route-semesterName="@item.Name" asp-route-semesterId="@item.Id" target="_blank" class="text-dark card-link stretched-link">All courses</a>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
         }
 
-    </table>
+    </div>
 </div>

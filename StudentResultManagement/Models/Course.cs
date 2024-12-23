@@ -10,6 +10,8 @@ namespace StudentResultManagement.Models
 
         public string CourseTitle { get; set; }
 
+        public double Credit { get; set; }
+
         public int? SemesterId { get; set; }
 
         [ForeignKey("SemesterId")]

@@ -40,7 +40,7 @@ namespace StudentResultManagement.Controllers
                 else
                 {
                     // Handle failure
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    TempData["Message"] = "Invalid login Attempt";
                    
                 }
             }

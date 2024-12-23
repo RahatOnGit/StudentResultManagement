@@ -1,34 +1,56 @@
 ﻿@model Course
 
+@{
+    var SemesterName = ViewBag.SemesterName;
 
-<h2>Delete Product</h2>
+    var SemesterId = ViewBag.SemesterId;
 
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="@Model.Id" />
+}
+<br/>
 
-    <div class="form-group">
-        <label asp-for="CourseNo" class="control-label"></label>
-        <input asp-for="CourseNo" class="form-control" />
-        <span asp-validation-for="CourseNo" class="text-danger"></span>
+<h2>Delete Course</h2>
+<hr/>
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Delete" asp-route-returnURl="@ViewBag.ReturnURl" method="post">
+            <input type="hidden" asp-for="@Model.Id" />
+
+            <div class="form-group">
+                <label asp-for="CourseNo" class="control-label"></label>
+                <input asp-for="CourseNo" disabled class="form-control" />
+                <span asp-validation-for="CourseNo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CourseTitle" class="control-label"></label>
+                <input asp-for="CourseTitle" disabled class="form-control" />
+                <span asp-validation-for="CourseTitle" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Credit" class="control-label"></label>
+                <input asp-for="Credit" class="form-control" />
+                <span asp-validation-for="Credit" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label">Semester Name</label>
+                <input type="text" class="form-control" value="@SemesterName" disabled />
+            </div>
+
+            <div class="form-group mt-2">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="AllCourses" asp-route-semesterId="@SemesterId"
+                   asp-route-semesterName="@SemesterName" class="btn btn-secondary">Back to list</a>
+
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label asp-for="CourseTitle" class="control-label"></label>
-        <input asp-for="CourseTitle" class="form-control" />
-        <span asp-validation-for="CourseTitle" class="text-danger"></span>
-    </div>
+</div>
 
 
-    <div class="form-group">
-        <label>Semester ID</label>
-        <input class="form-control" readonly="readonly" value="@Model.Semester.Name" />
-    </div>
-
-    <div class="form-group mt-2">
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to list</a>
-    </div>
-</form>
 
 
 @section Scripts {

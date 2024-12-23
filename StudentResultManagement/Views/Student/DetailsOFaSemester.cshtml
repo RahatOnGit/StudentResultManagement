@@ -8,13 +8,17 @@
     str += str1;
 }
 
-
+<style>
+    .back-color{
+        background-color: #A0DAA9;
+    }
+</style>
 
 <div class="container">
 <div class="row">
     <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body bg-success text-light">
+        <div class="card back-color">
+            <div class="card-body text-dark">
                 <h5 class="card-text">Student Id: @Model.Student.Roll</h5>
                 <h5 class="card-text">Student Name: @Model.Student.Name</h5>
                 <h5 class="card-text">Series: @Model.Student.Series.SeriesName</h5>
@@ -38,7 +42,7 @@
        
         <div class="card">
             <div class="card-body">
-                <h3 class="text-primary">Average GPA of the Semester: @Model.AverageResult</h3>
+                <h3 class="text-primary"> GPA of the Semester: @Model.GPA</h3>
 
                 <a asp-action="Details" class="mt-2 btn btn-outline-primary" asp-controller="Student" asp-route-id="@ViewBag.StudentId">Go Back</a>
 
@@ -48,6 +52,7 @@
         </div>
     </div>
 </div>
+
 
 
 <div class="container">
@@ -68,15 +73,15 @@
             @if (results[i] is string)
             {
 
-             <h6 class="text-secondary mt-2">@results[i]</h6>
-                        <a class="link-primary"  asp-action="Course" asp-route-course_id="@item.Id" asp-route-returnUrl="@str" asp-route-student_id="@ViewBag.StudentId">Add Grade</a>
+                        <h6 class="text-secondary mt-2">@results[i]</h6>
+                        <a class="stretched-link link-primary"  asp-action="AddMarkofACourse" asp-route-course_id="@item.Id" asp-route-returnUrl="@str" asp-route-student_id="@ViewBag.StudentId">Add Mark</a>
 
             } 
 
             else
             {
-                        <h6 class="text-primary mt-2">Obtained Grade: @results[i].Mark</h6>
-                        <a class="link-success" asp-action="UpdateCourse" asp-route-course_id="@item.Id" asp-route-returnUrl="@str" asp-route-student_id="@ViewBag.StudentId">Update Grade</a>
+                        <h6 class="text-primary mt-2">Obtained Grade: @results[i]</h6>
+                            <a class="stretched-link link-success" asp-action="UpdateMarkOfACourse" asp-route-course_id="@item.Id" asp-route-returnUrl="@str" asp-route-student_id="@ViewBag.StudentId">Update Mark</a>
 
             }
         </div>

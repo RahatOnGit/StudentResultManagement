@@ -17,7 +17,7 @@ namespace StudentResultManagement.Controllers
         }
         public IActionResult Index()
         {
-            return View(_db.Series.ToList());
+            return View(_db.Series.OrderBy(c=>c.SeriesName).ToList());
         }
 
         public IActionResult Create()
@@ -44,88 +44,15 @@ namespace StudentResultManagement.Controllers
 
         }
 
+       
 
 
 
 
 
 
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var data = await _db.Series.FindAsync(id);
-
-            if (data == null)
-            {
-                return NotFound();
-            }
-
-            return View(data);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int? id, Series series)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid && id == series.Id)
-            {
-                 _db.Series.Update(series);
-                await _db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(series);
-
-        }
-
-
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var data = await _db.Series.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (data == null)
-            {
-                return NotFound();
-            }
-
-
-
-            return View(data);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Delete(int id, Series series)
-        {
-            if (ModelState.IsValid && id == series.Id)
-            {
-                var data = await _db.Series.FindAsync(id);
-
-                if (data == null)
-                {
-                    return NotFound();
-                }
-
-                _db.Series.Remove(data);
-                await _db.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(series);
-        }
+     
 
 
 

@@ -1,6 +1,16 @@
 ﻿@model dynamic
 
+<style>
+    .back-color {
+        background-color: #A0DAA9;
+    }
 
+
+
+        .back-color:hover {
+            background-color: #D9CE52;
+        }
+</style>
 
 
 
@@ -30,9 +40,8 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-primary">Average GPA : @Model.AverageResult</h3>
+                    <h3 class="text-primary">CGPA : @Model.CGPA</h3>
 
-                    <a asp-action="Index" asp-controller="Student" class="mt-2 btn btn-outline-primary">Go Back</a>
 
                 </div>
             </div>
@@ -47,12 +56,12 @@
         {
 
   
-        <div class="col-lg-6">
+        <div class="col-lg-3">
 
 
-            <div class="card mt-4">
-                <div class="card-body bg-light text-center">
-                    <a class="display-5 card-link stretched-link" style="text-decoration:none"  asp-action="Semester" asp-route-student_id="@Model.Student.Id" asp-route-semester_id="@item.Id">@item.Name</a>
+            <div class="card back-color mt-4">
+                <div class="card-body text-center">
+                        <a class="display-5 card-link stretched-link text-dark" style="text-decoration:none" asp-action="DetailsOFaSemester" asp-route-student_id="@Model.Student.Id" asp-route-semester_id="@item.Id">@item.Name</a>
 
                  </div>
             </div>

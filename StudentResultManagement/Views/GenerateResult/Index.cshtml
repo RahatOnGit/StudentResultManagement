@@ -1,7 +1,20 @@
 ﻿@model StudentResultManagement.Models.GenerateResultViewModel
 
+@if (ViewBag.Message== true)
+{
+    <div class="alert alert-success alert-dismissible container text-center col-lg-5 mt-5" role="alert">
+        <button class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="close">
+        </button><h6>There is no student at the series.</h6>
+        <hr />
 
-<div class="row justify-content-center">
+
+    </div>
+
+}
+
+<div class="row justify-content-center mt-5">
 
 
     <div class="col-lg-6">
@@ -11,19 +24,19 @@
             </div>
             
             <div class="card-body">
-                <form asp-action="AllStudents" asp-controller="GenerateResult" method="get">
+                <form asp-action="GeneratePdf" asp-controller="GenerateResult" method="get">
                     <div class="row">
 
                     
                     <div class="form-group">
-                        <select asp-for="Series" class="form-control" asp-items="@ViewBag.Series" required>
+                            <select id ="selectSeries" asp-for="Series" class="form-control" asp-items="@ViewBag.Series" required>
                             <option value="">Select Series</option>
                         </select>
                     </div>
 
 
                     <div class="form-group mt-2">
-                        <select asp-for="Semester" class="form-control" asp-items="@ViewBag.Semester" required>
+                        <select id="selectSemesterName" asp-for="Semester" class="form-control" asp-items="@ViewBag.Semester" required>
                             <option value="">Select Semester</option>
                         </select>
                     </div>
@@ -47,3 +60,25 @@
 
 
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script type="text/javascript" src=" https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+       
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#selectSemesterName").select2();
+            $("#selectSeries").select2();
+        });
+    
+    </script>
+}
+
+
